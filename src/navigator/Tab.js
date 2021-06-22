@@ -25,7 +25,7 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Carrinho"
+        name="Lista"
         component={Cart}
         options={{
           tabBarIcon: () => {
@@ -33,35 +33,7 @@ export default function TabNavigator() {
           },
           tabBarLabel: ({ focused, color }) => {
             return (
-              <Text style={{ color: focused ? color : '#000' }}>Carrinho</Text>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Detalhes"
-        component={Details}
-        options={{
-          tabBarIcon: () => {
-            return <Icon name="document-outline" color="#000" size={18} />;
-          },
-          tabBarLabel: ({ focused, color }) => {
-            return (
-              <Text style={{ color: focused ? color : '#000' }}>Detalhes</Text>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Opções"
-        component={Options}
-        options={{
-          tabBarIcon: () => {
-            return <Icon name="settings-outline" color="#000" size={18} />;
-          },
-          tabBarLabel: ({ focused, color }) => {
-            return (
-              <Text style={{ color: focused ? color : '#000' }}>Opções</Text>
+              <Text style={{ color: focused ? color : '#000' }}>Lista</Text>
             );
           },
         }}

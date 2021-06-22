@@ -1,37 +1,72 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet, Button, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import firebase from '../../services/firebase';
+export default function Listagem() {
+  const [data, setData] = useState([]);
 
-export default function Detalhes() {
-  const navigation = useNavigation();
-
-  const goToScreen = useCallback(screen => {
-    navigation.navigate(screen);
+  useEffect(() => {
+    firebase
+      .database()
+      .ref('usuarios')
+      .on('value', snapshot => {
+        setData([]);
+        snapshot.forEach(item => {
+          let data = {
+            key: item.key,
+            nome: item.val().nome,
+            sobrenome: item.val().sobrenome,
+            idade: item.val().idade,
+            pai: item.val().pai,
+            mae: item.val().mae,
+          };
+          setData(oldArray => [...oldArray, data]);
+        });
+      });
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={{ marginBottom: 10 }}>Tela do Carrinho</Text>
-      <Button title="Home" color="#53afff" onPress={() => goToScreen('Home')} />
-      <View style={styles.btn}>
-        <Button
-          title="Detalhes"
-          color="#53afff"
-          onPress={() => goToScreen('Detalhes')}
-        />
-      </View>
-      <Button
-        title="Opções"
-        color="#53afff"
-        onPress={() => goToScreen('Opções')}
-      />
-    </View>
+    <FlatList
+      keyExtractor={data.key}
+      data={data}
+      renderItem={() => {
+        return (
+          <View style={styles.container}>
+            <Text style={styles.titulo}>Nome: {data[0].nome}</Text>
+            <View style={styles.body}>
+              <View>
+                <Text style={styles.text}>Sobrenome: {data[0].sobrenome}</Text>
+                <Text style={styles.text}>Idade: {data[0].idade}</Text>
+              </View>
+              <View>
+                <Text style={styles.text}>Pai: {data[0].pai}</Text>
+                <Text style={styles.text}>Mãe: {data[0].mae}</Text>
+              </View>
+            </View>
+          </View>
+        );
+      }}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  btn: {
-    marginVertical: '5%',
+  container: {
+    backgroundColor: '#c7c7c7',
+    marginHorizontal: '5%',
+    marginTop: '5%',
+    borderRadius: 12,
+    padding: '5%',
+  },
+  titulo: {
+    textAlign: 'center',
+    marginBottom: '5%',
+    fontSize: 18,
+  },
+  body: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  text: {
+    fontSize: 16,
   },
 });
